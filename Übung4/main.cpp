@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
 	char* option;
 	char* filename;
 	string input = "";
+	int nodeNum;
 	/*for (int i = 0; i < argc; i++) {    //for checking args
 		cout << argv[i] << endl;
 	}*/
@@ -35,7 +36,20 @@ int main(int argc, char* argv[]) {
 		cerr << "Error! File not found." << endl;
 		return 1;
 	}
-	else {												//just outputs file...for now			
+	else {
+		if (getline(file, input)) {
+			try {
+				nodeNum = stoi(input);
+			}
+				cerr << "Error! Number of nodes in file could not be read." << endl;
+				return 1;
+			}
+		}
+		else {
+			cerr << "Error! Number of nodes in file could not be read." << endl;
+			return 1;
+		}
+		cout << "Number of nodes: " << nodeNum << endl;
 		cout << "Content of file:" << endl;
 		while (getline(file, input)) {
 			cout << input << endl;
