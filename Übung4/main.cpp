@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
@@ -118,6 +119,7 @@ int read_file(char* filename, int* nodeNum, nodeList* places) {
 }
 
 int main(int argc, char* argv[]) {
+	clock_t c_start = std::clock();
 	char* option;
 	char* filename;
 	int nodeNum;
@@ -145,6 +147,12 @@ int main(int argc, char* argv[]) {
 	cout << endl << "Number of nodes: " << nodeNum << endl;
 	cout << "Printing nodes:" << endl;
 	places.printNodes();
+
+
+	clock_t c_end = std::clock();
+
+	long double time_elapsed_ms = 1000.0 * (c_end - c_start) / CLOCKS_PER_SEC;
+	cout << endl << endl << "CPU time used: " << time_elapsed_ms << " ms\n";
 
 	return 0;
 }
