@@ -1,9 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <ctime>
+#include <vector>
 
 using namespace std;
+
+class xy
+{
+public:
+	double x, y;
+};
 
 class nodeList {
 	struct node{
@@ -13,6 +21,8 @@ class nodeList {
 		node* next;
 	};
 	
+	
+
 public:
 	nodeList() {
 		head = NULL;
@@ -60,7 +70,7 @@ int check_input_validity(int argc, char* argv[]) {
 	return 0;
 }
 
-int read_file(char* filename, int* nodeNum, nodeList* places) {
+int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 	string input = "";
 	ifstream file(filename);
 	string x_s;
@@ -68,6 +78,7 @@ int read_file(char* filename, int* nodeNum, nodeList* places) {
 	double x_d;
 	double y_d;
 	int nodeNameCounter = 0;
+	xy axis;
 
 	if (!file.is_open()) {								//looks for file
 		cerr << "Error! File not found." << endl;
@@ -106,7 +117,11 @@ int read_file(char* filename, int* nodeNum, nodeList* places) {
 				return 1;
 			}
 
-			places->addNode(x_d, y_d, nodeNameCounter);
+			axis.x = x_d;
+			axis.y = y_d;
+			//coordinates.push_back(axis);
+			
+			//places->addNode(x_d, y_d, nodeNameCounter);
 			nodeNameCounter++;
 			cout << x_s << " " << y_s << endl;
 		}
@@ -118,12 +133,30 @@ int read_file(char* filename, int* nodeNum, nodeList* places) {
 	return 0;
 }
 
+void generateMatrix(vector<vector<double>>& matrix, vector<xy>& coordinates, int nodeNum)
+{
+	double distance[2];
+	for (int i = 0; i <= nodeNum; i++)
+	{
+		for (int j = 0; j <= nodeNum; j++)
+		{
+			distance[0] = abs(coordinates[i].x - coordinates[j].x);
+			distance[1] = abs(coordinates[i].y - coordinates[j].y);
+			matrix[i][j] = sqrt(pow(distance[0], 2) + pow(distance[1], 2));
+		}
+	}
+}
+
 int main(int argc, char* argv[]) {
+	vector<vector<double>> matrix;
+	vector<xy> coordinates;
 	clock_t c_start = std::clock();
 	char* option;
 	char* filename;
 	int nodeNum;
 	nodeList places;
+
+	coordinates[0].x;
 
 	/*for (int i = 0; i < argc; i++) {    //for checking args
 		cout << argv[i] << endl;
@@ -140,12 +173,13 @@ int main(int argc, char* argv[]) {
 	cout << "Option: " << option << endl;
 	cout << "Filename: " << filename << endl << endl;
 	
-	if (read_file(filename, &nodeNum, &places)) {
+	if (read_file(filename, &nodeNum, coordinates)) {
 		return 1;
 	}
 
 	cout << endl << "Number of nodes: " << nodeNum << endl;
 	cout << "Printing nodes:" << endl;
+	cout << coordinates[0].x << "    " << coordinates[0].y << endl;
 	places.printNodes();
 
 
