@@ -4,6 +4,7 @@
 #include <vector>
 #include <ctime>
 #include <vector>
+#include <limits>
 
 using namespace std;
 
@@ -98,10 +99,51 @@ void generateMatrix(vector<vector<double>>& matrix, vector<xy>& coordinates, int
 		{
 			distance[0] = abs(coordinates[i].x - coordinates[j].x);
 			distance[1] = abs(coordinates[i].y - coordinates[j].y);
-			row.push_back(sqrt(pow(distance[0], 2) + pow(distance[1], 2)));
+			if (i == j) {
+				row.push_back(numeric_limits<double>::max());
+			}
+			else {
+				row.push_back(sqrt(pow(distance[0], 2) + pow(distance[1], 2)));
+			}
 			//matrix[i][j] = sqrt(pow(distance[0], 2) + pow(distance[1], 2)); WHAT REALLY HAPPENS
 		}
 		matrix.push_back(row);
+	}
+}
+
+int fact(int num) {
+	int count = num-1;
+	while (count > 0) {
+		num *= count;
+		count--;
+	}
+	return num;
+}
+
+string get_combi(int nodeNum, int counter) {
+	string combi = "";
+	char letter;
+	int store_fact_of_current_pos;
+	for (int i = 0; i < nodeNum; i++) {
+		letter = '0';
+		store_fact_of_current_pos = fact(nodeNum - i);
+		while (counter >= store_fact_of_current_pos) {
+			counter -= store_fact_of_current_pos;
+			letter++;
+		}
+		combi += letter;
+	}
+	return combi;
+}
+
+void route_enumeration(vector<vector<double>>& matrix, vector<xy>& coordinates, int nodeNum) {
+	int i_holder;
+	string combi;
+	int store_fact = fact(nodeNum);
+	for (int i = 0; i < store_fact; i++) {
+		combi = get_combi(nodeNum, i);
+
+		cout << i << ": " << combi << endl;
 	}
 }
 
@@ -113,11 +155,6 @@ int main(int argc, char* argv[]) {
 	char* filename;
 	int nodeNum;
 
-	
-
-	/*for (int i = 0; i < argc; i++) {    //for checking args
-		cout << argv[i] << endl;
-	}*/
 
 	if (check_input_validity(argc, argv)) {
 		return 1;
@@ -148,9 +185,22 @@ int main(int argc, char* argv[]) {
 	{
 		for (int j = 0; j < matrix[i].size(); j++)
 		{
-			cout << matrix[i][j] << "  ";
+			if (matrix[i][j] == numeric_limits<double>::max()) {
+				cout << "max" << "  ";
+			}
+			else {
+				cout << matrix[i][j] << "  ";
+			}
 		}
 		cout << endl;
+	}
+
+	if (strcmp(argv[1], "-e") == 0) {
+		cout << "testing -e" << endl;
+		route_enumeration(matrix, coordinates, nodeNum);
+	}
+	else {
+		cout << "testing -n" << endl;
 	}
 
 	clock_t c_end = std::clock();

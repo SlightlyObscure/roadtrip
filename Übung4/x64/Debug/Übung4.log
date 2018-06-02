@@ -1,2 +1,3 @@
 ﻿  main.cpp
-  Übung4.vcxproj -> C:\Users\Mathias\Documents\GitHub\roadtrip\x64\Debug\Übung4.exe
+c:\users\leon\desktop\fh\alg\roadtrip\übung4\main.cpp(140): warning C4101: "i_holder": Unreferenzierte lokale Variable
+  Übung4.vcxproj -> C:\Users\Leon\Desktop\FH\ALG\roadtrip\x64\Debug\Übung4.exe
