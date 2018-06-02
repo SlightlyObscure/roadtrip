@@ -13,50 +13,6 @@ public:
 	double x, y;
 };
 
-class nodeList {
-	struct node{
-		double node_x;
-		double node_y;
-		int name;
-		node* next;
-	};
-	
-	
-
-public:
-	nodeList() {
-		head = NULL;
-	}
-	~nodeList() {
-		node* next = head;
-		while (next) {
-			node* deleteNode = next;
-			next = next->next;
-			delete deleteNode;
-		}
-	}
-	void addNode(double input_x, double input_y, int input_name) {
-		node* newNode = new node();
-		newNode->node_x = input_x;
-		newNode->node_y = input_y;
-		newNode->name = input_name;
-		newNode->next = head;
-		head = newNode;
-	}
-	void printNodes() {
-		node* next = head;
-		while (next) {
-			node* printNode = next;
-			next = next->next;
-			cout << "node" << printNode->name << ": " << printNode->node_x << " " << printNode->node_y << endl;
-		}
-	}
-
-private:
-	node* head;
-};
-
-
 int check_input_validity(int argc, char* argv[]) {
 	if (argc != 3) {																			//checks if arg counter is correct
 		cerr << "Error! Invalid syntax. Correct syntax: <program name> <option> <filename>";
@@ -121,7 +77,6 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 			axis.y = y_d;
 			coordinates.push_back(axis);
 			
-			//places->addNode(x_d, y_d, nodeNameCounter);
 			nodeNameCounter++;
 			cout << x_s << " " << y_s << endl;
 		}
@@ -136,14 +91,17 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 void generateMatrix(vector<vector<double>>& matrix, vector<xy>& coordinates, int nodeNum)
 {
 	double distance[2];
-	for (int i = 0; i <= nodeNum; i++)
+	for (int i = 0; i < nodeNum; i++)
 	{
-		for (int j = 0; j <= nodeNum; j++)
+		vector<double> row;
+		for (int j = 0; j < nodeNum; j++)
 		{
 			distance[0] = abs(coordinates[i].x - coordinates[j].x);
 			distance[1] = abs(coordinates[i].y - coordinates[j].y);
-			matrix[i][j] = sqrt(pow(distance[0], 2) + pow(distance[1], 2));
+			row.push_back(sqrt(pow(distance[0], 2) + pow(distance[1], 2)));
+			//matrix[i][j] = sqrt(pow(distance[0], 2) + pow(distance[1], 2)); WHAT REALLY HAPPENS
 		}
+		matrix.push_back(row);
 	}
 }
 
@@ -154,7 +112,6 @@ int main(int argc, char* argv[]) {
 	char* option;
 	char* filename;
 	int nodeNum;
-	nodeList places;
 
 	
 
@@ -179,8 +136,22 @@ int main(int argc, char* argv[]) {
 
 	cout << endl << "Number of nodes: " << nodeNum << endl;
 	cout << "Printing nodes:" << endl;
-	cout << coordinates[0].x << "    " << coordinates[0].y << endl;
-	places.printNodes();
+	for (int i = 0; i < coordinates.size(); i++)
+	{
+		cout << "(" << coordinates[i].x << ", " << coordinates[i].y << ")" << endl;
+	}
+	
+	generateMatrix(matrix, coordinates, nodeNum);
+
+	cout << endl << "Adjacency matrix:" << endl;
+	for (int i = 0; i < matrix.size(); i++)
+	{
+		for (int j = 0; j < matrix[i].size(); j++)
+		{
+			cout << matrix[i][j] << "  ";
+		}
+		cout << endl;
+	}
 
 	clock_t c_end = std::clock();
 
