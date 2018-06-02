@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
 	int nodeNum;
 	nodeList places;
 
-	coordinates[0].x;
+	
 
 	/*for (int i = 0; i < argc; i++) {    //for checking args
 		cout << argv[i] << endl;
