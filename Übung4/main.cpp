@@ -112,44 +112,89 @@ void generateMatrix(vector<vector<double>>& matrix, vector<xy>& coordinates, int
 }
 
 int fact(int num) {
-	int count = num-1;
-	while (count > 0) {
-		num *= count;
-		count--;
+	if (num > 0) {
+		int count = num - 1;
+		while (count > 0) {
+			num *= count;
+			count--;
+		}
 	}
 	return num;
 }
 
-string get_combi(int nodeNum, int counter) {
-	string combi = "";
-	char letter;
+vector<int> get_combi(int nodeNum, int counter) {
+	vector<int> combi;
+	vector<int> order;
+	int temp_order;
+	int pos;
+	vector<bool> used;
 	int store_fact_of_current_pos;
+
 	for (int i = 0; i < nodeNum; i++) {
-		letter = '0';
-		store_fact_of_current_pos = fact(nodeNum - i);
-		while (counter >= store_fact_of_current_pos) {
+		used.push_back(0);
+		temp_order = 0;
+		store_fact_of_current_pos = fact(nodeNum - i -1);
+		while (counter >= store_fact_of_current_pos && store_fact_of_current_pos>0) {
 			counter -= store_fact_of_current_pos;
-			letter++;
+			temp_order++;
 		}
-		combi += letter;
+		order.push_back(temp_order);
 	}
+
+	for (int i = 0; i < nodeNum; i++) {
+		pos = -1;
+		for (int j = 0; j <= order[i]; j++) {
+			pos++;
+			while (used[pos] != 0) {
+				pos++;
+			}
+		}
+		used[pos] = 1;
+		combi.push_back(pos);
+	}
+
 	return combi;
 }
 
-void route_enumeration(vector<vector<double>>& matrix, vector<xy>& coordinates, int nodeNum) {
+double get_route_len(int nodeNum, vector<int> combi, vector<vector<double>>& matrix) {
+	double length = 0;
+	for (int i = 0; i < nodeNum; i++) {
+		if (nodeNum - 1 != i) {
+			length += matrix[combi[i]][combi[i + 1]];
+		}
+		else {
+			length += matrix[combi[i]][combi[0]];
+		}
+	}
+	return length;
+}
+double route_enumeration(vector<vector<double>>& matrix, vector<xy>& coordinates, int nodeNum, vector<int>& best_combi) {
 	int i_holder;
-	string combi;
+	vector<int> combi;
+	double route_length;
+	double shortest= numeric_limits<double>::max();
+
 	int store_fact = fact(nodeNum);
 	for (int i = 0; i < store_fact; i++) {
 		combi = get_combi(nodeNum, i);
-
-		cout << i << ": " << combi << endl;
+		route_length = get_route_len(nodeNum, combi, matrix);
+		/*cout << i << ": ";
+		for (int j = 0; j < nodeNum; j++) {
+			 cout << combi[j];
+		}
+		cout << "; " << route_length << endl;*/
+		if(route_length < shortest) {
+			shortest = route_length;
+			best_combi = combi;
+		}
 	}
+	return shortest;
 }
 
 int main(int argc, char* argv[]) {
 	vector<vector<double>> matrix;
 	vector<xy> coordinates;
+	vector<int> best_combi;
 	clock_t c_start = std::clock();
 	char* option;
 	char* filename;
@@ -196,8 +241,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (strcmp(argv[1], "-e") == 0) {
-		cout << "testing -e" << endl;
-		route_enumeration(matrix, coordinates, nodeNum);
+		cout << endl << "Shortest route is: " << route_enumeration(matrix, coordinates, nodeNum, best_combi) << endl;
+		cout << "Visited Nodes: ";
+		for (int i = 0; i < nodeNum; i++) {
+			char print_node_name = 'A' + best_combi[i];
+			cout << print_node_name;
+		}
+		cout << endl;
 	}
 	else {
 		cout << "testing -n" << endl;
