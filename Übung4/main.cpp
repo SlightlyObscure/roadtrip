@@ -119,7 +119,7 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 
 			axis.x = x_d;
 			axis.y = y_d;
-			//coordinates.push_back(axis);
+			coordinates.push_back(axis);
 			
 			//places->addNode(x_d, y_d, nodeNameCounter);
 			nodeNameCounter++;
@@ -181,7 +181,6 @@ int main(int argc, char* argv[]) {
 	cout << "Printing nodes:" << endl;
 	cout << coordinates[0].x << "    " << coordinates[0].y << endl;
 	places.printNodes();
-
 
 	clock_t c_end = std::clock();
 
