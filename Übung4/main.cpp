@@ -19,7 +19,7 @@ int check_input_validity(int argc, char* argv[]) {
 		cerr << "Error! Invalid syntax. Correct syntax: <program name> <option> <filename>";
 		return 1;
 	}
-	if (strcmp(argv[1], "-e") != 0 && strcmp(argv[1], "-n")) {									//checks if option is valid
+	if (strcmp(argv[1], "-e") != 0 && strcmp(argv[1], "-n") != 0) {									//checks if option is valid
 		cerr << "Error! Invalid option. Valid options are -e or -n (not both)." << endl;
 		//cout << argv[1] << endl;
 		return 1;
@@ -178,11 +178,11 @@ double route_enumeration(vector<vector<double>>& matrix, vector<xy>& coordinates
 	for (int i = 0; i < store_fact; i++) {
 		combi = get_combi(nodeNum, i);
 		route_length = get_route_len(nodeNum, combi, matrix);
-		/*cout << i << ": ";
+		cout << i << ": ";
 		for (int j = 0; j < nodeNum; j++) {
 			 cout << combi[j];
 		}
-		cout << "; " << route_length << endl;*/
+		cout << "; " << route_length << endl;
 		if(route_length < shortest) {
 			shortest = route_length;
 			best_combi = combi;
