@@ -56,12 +56,20 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 			return 1;
 		}
 
+		if (*nodeNum < 2) {
+			cerr << "Error! Number of nodes cannot be less than 2." << endl;
+			return 1;
+		}
+
 		cout << "Number of nodes: " << *nodeNum << endl;
 		cout << "Content of file:" << endl;
 
 		while (getline(file, input)) {
 			if (nodeNameCounter+1 > *nodeNum) {
 				break;
+			}
+			for (int i = 0; ) {
+				
 			}
 			x_s = input.substr(0, 3);
 			if(!(x_d = atof(x_s.c_str()))) {
