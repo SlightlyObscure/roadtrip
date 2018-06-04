@@ -105,6 +105,50 @@ void generateMatrix(vector<vector<double>>& matrix, vector<xy>& coordinates, int
 	}
 }
 
+void nearestNeighbor(vector<vector<double>>& matrix, vector<xy>& coordinates)
+{
+	//cout << "Starting point: (" << coordinates[0].x << ", " << coordinates[0].y << ")" << endl;
+
+	int index = 0;
+	int count = 0;
+	double distanceTravelled = 0;
+
+	for (count; count < matrix.size(); count++)
+	{
+		for (int j = 0; j < matrix[index].size(); j++)
+		{
+			double min = DBL_MAX;
+			if (matrix[index][j] < min)
+			{
+				min = matrix[index][j];
+				cout << matrix[index][j] << endl;
+				matrix.erase (matrix.begin() + index);
+				//cout << "Point " << index+1 << ": (" << coordinates[index].x << ", " << coordinates[index].y << ")" << endl;
+				index = j;
+
+				//cout << "Point " << j << ": (" << coordinates[index].x << ", " << coordinates[index].y << ")" << endl;
+				//cout << "matrix size: " << matrix.size() << endl;
+				//cout << "matrix[j] size: " << matrix[j].size() << endl;
+
+
+				cout << endl << endl << endl << "Adjacency matrix:" << endl;
+				for (int i = 0; i < matrix.size(); i++)
+				{
+					for (int j = 0; j < matrix[i].size(); j++)
+					{
+						cout << matrix[i][j] << " | ";
+					}
+					cout << endl;
+				}
+			}
+
+		}
+	}
+		
+	
+	//matrix[0][0];
+}
+
 int main(int argc, char* argv[]) {
 	vector<vector<double>> matrix;
 	vector<xy> coordinates;
@@ -148,10 +192,14 @@ int main(int argc, char* argv[]) {
 	{
 		for (int j = 0; j < matrix[i].size(); j++)
 		{
-			cout << matrix[i][j] << "  ";
+			cout << matrix[i][j] << " | ";
 		}
 		cout << endl;
 	}
+
+
+	cout << endl << "Nearest Neighbor Heuristic:" << endl;
+	nearestNeighbor(matrix, coordinates);
 
 	clock_t c_end = std::clock();
 
