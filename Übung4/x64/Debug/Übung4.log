@@ -1,4 +1,3 @@
 ﻿  main.cpp
-c:\users\leon\desktop\fh\alg\roadtrip\übung4\main.cpp(177): warning C4101: "i_holder": Unreferenzierte lokale Variable
-  LINK : C:\Users\Leon\Desktop\FH\ALG\roadtrip\x64\Debug\Übung4.exe wurde nicht gefunden oder beim letzten inkrementellen Linkvorgang nicht erstellt; vollständiger Link wird durchgeführt.
+c:\users\leon\desktop\fh\alg\roadtrip\übung4\main.cpp(186): warning C4101: "i_holder": Unreferenzierte lokale Variable
   Übung4.vcxproj -> C:\Users\Leon\Desktop\FH\ALG\roadtrip\x64\Debug\Übung4.exe

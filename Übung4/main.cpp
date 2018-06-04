@@ -37,6 +37,7 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 	int nodeNameCounter = 0;
 	xy axis;
 
+
 	if (!file.is_open()) {								//looks for file
 		cerr << "Error! File not found." << endl;
 		return 1;
@@ -68,8 +69,13 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 			if (nodeNameCounter+1 > *nodeNum) {
 				break;
 			}
-			for (int i = 0; ) {
-				
+			int space = 0;
+			for (int i = 0; space > 0; i++) {
+				cout << input[i] << endl;
+				if (input[i] == ' ') {
+					
+					space = i;
+				}
 			}
 			x_s = input.substr(0, 3);
 			if(!(x_d = atof(x_s.c_str()))) {
@@ -302,7 +308,7 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		cout << endl;
-		cout << endl << "Shortest route is: " <<  nearestNeighbor(matrix, coordinates) << endl;
+		cout << endl << "Route is: " <<  nearestNeighbor(matrix, coordinates) << endl;
 	}
 
 	clock_t c_end = std::clock();
