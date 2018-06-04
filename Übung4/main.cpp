@@ -55,8 +55,8 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 			return 1;
 		}
 
-		cout << "Number of nodes: " << *nodeNum << endl;
-		cout << "Content of file:" << endl;
+		/*cout << "Number of nodes: " << *nodeNum << endl;
+		cout << "Content of file:" << endl;*/
 
 		while (getline(file, input)) {
 			if (nodeNameCounter+1 > *nodeNum) {
@@ -78,7 +78,7 @@ int read_file(char* filename, int* nodeNum, vector<xy>& coordinates) {
 			coordinates.push_back(axis);
 			
 			nodeNameCounter++;
-			cout << x_s << " " << y_s << endl;
+			/*cout << x_s << " " << y_s << endl;*/
 		}
 		if (nodeNameCounter < *nodeNum) {
 			*nodeNum = nodeNameCounter;
@@ -98,55 +98,57 @@ void generateMatrix(vector<vector<double>>& matrix, vector<xy>& coordinates, int
 		{
 			distance[0] = abs(coordinates[i].x - coordinates[j].x);
 			distance[1] = abs(coordinates[i].y - coordinates[j].y);
-			row.push_back(sqrt(pow(distance[0], 2) + pow(distance[1], 2)));
+			if (i == j) {
+				row.push_back(numeric_limits<double>::max());
+			}
+			else {
+				row.push_back(sqrt(pow(distance[0], 2) + pow(distance[1], 2)));
+			}
 			//matrix[i][j] = sqrt(pow(distance[0], 2) + pow(distance[1], 2)); WHAT REALLY HAPPENS
 		}
 		matrix.push_back(row);
 	}
 }
 
-void nearestNeighbor(vector<vector<double>>& matrix, vector<xy>& coordinates)
+double nearestNeighbor(vector<vector<double>>& matrix, vector<xy>& coordinates)
 {
-	//cout << "Starting point: (" << coordinates[0].x << ", " << coordinates[0].y << ")" << endl;
-
-	int index = 0;
+	int index = 0; // starting at point 0
 	int count = 0;
-	double distanceTravelled = 0;
-
-	for (count; count < matrix.size(); count++)
+	int nextIndex;
+	// creating a dynamic vector as for flagging used points
+	vector<bool> check;
+	for (int i = 0; i <= matrix.size(); i++)
 	{
-		for (int j = 0; j < matrix[index].size(); j++)
-		{
-			double min = DBL_MAX;
-			if (matrix[index][j] < min)
+		check.push_back(false);
+	}
+	double distanceTravelled = 0;
+	
+
+	for (count; count < matrix.size() - 1; count++) // Last point => return to first point
+	{
+		double min = DBL_MAX;
+		int j; // iterator
+		for (j = 0; j < matrix[index].size(); j++)
+		{	
+			if (check[j] != true && matrix[index][j] < min)
 			{
 				min = matrix[index][j];
-				cout << matrix[index][j] << endl;
-				matrix.erase (matrix.begin() + index);
-				//cout << "Point " << index+1 << ": (" << coordinates[index].x << ", " << coordinates[index].y << ")" << endl;
-				index = j;
-
-				//cout << "Point " << j << ": (" << coordinates[index].x << ", " << coordinates[index].y << ")" << endl;
-				//cout << "matrix size: " << matrix.size() << endl;
-				//cout << "matrix[j] size: " << matrix[j].size() << endl;
-
-
-				cout << endl << endl << endl << "Adjacency matrix:" << endl;
-				for (int i = 0; i < matrix.size(); i++)
-				{
-					for (int j = 0; j < matrix[i].size(); j++)
-					{
-						cout << matrix[i][j] << " | ";
-					}
-					cout << endl;
-				}
+				nextIndex = j;
 			}
 
 		}
-	}
 		
-	
-	//matrix[0][0];
+		cout << "Point " << index + 1 << ": (" << coordinates[index].x << ", " << coordinates[index].y << ")" << endl;
+
+		distanceTravelled += min;
+		
+		check[index] = true;
+		
+		index = nextIndex;
+	}
+	cout << "Point " << nextIndex + 1 << ": (" << coordinates[nextIndex].x << ", " << coordinates[nextIndex].y << ")" << endl;
+	//Way back to 0
+	return distanceTravelled += matrix[index][0];
 }
 
 int main(int argc, char* argv[]) {
@@ -178,16 +180,16 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	cout << endl << "Number of nodes: " << nodeNum << endl;
+	/*cout << endl << "Number of nodes: " << nodeNum << endl;
 	cout << "Printing nodes:" << endl;
 	for (int i = 0; i < coordinates.size(); i++)
 	{
 		cout << "(" << coordinates[i].x << ", " << coordinates[i].y << ")" << endl;
-	}
+	}*/
 	
 	generateMatrix(matrix, coordinates, nodeNum);
 
-	cout << endl << "Adjacency matrix:" << endl;
+	/*cout << endl << "Adjacency matrix:" << endl;
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		for (int j = 0; j < matrix[i].size(); j++)
@@ -195,11 +197,16 @@ int main(int argc, char* argv[]) {
 			cout << matrix[i][j] << " | ";
 		}
 		cout << endl;
+	}*/
+
+	if (argv[1] == "-n")
+	{
+		/*cout << endl << "Nearest Neighbor Heuristic:" << endl;*/
+		cout << nearestNeighbor(matrix, coordinates) << endl;
 	}
+	
 
-
-	cout << endl << "Nearest Neighbor Heuristic:" << endl;
-	nearestNeighbor(matrix, coordinates);
+	
 
 	clock_t c_end = std::clock();
 
