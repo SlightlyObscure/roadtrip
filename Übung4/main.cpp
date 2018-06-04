@@ -178,11 +178,11 @@ double route_enumeration(vector<vector<double>>& matrix, vector<xy>& coordinates
 	for (int i = 0; i < store_fact; i++) {
 		combi = get_combi(nodeNum, i);
 		route_length = get_route_len(nodeNum, combi, matrix);
-		cout << i << ": ";
+		/*cout << i << ": ";
 		for (int j = 0; j < nodeNum; j++) {
 			 cout << combi[j];
 		}
-		cout << "; " << route_length << endl;
+		cout << "; " << route_length << endl;*/
 		if(route_length < shortest) {
 			shortest = route_length;
 			best_combi = combi;
@@ -191,11 +191,52 @@ double route_enumeration(vector<vector<double>>& matrix, vector<xy>& coordinates
 	return shortest;
 }
 
+double nearestNeighbor(vector<vector<double>>& matrix, vector<xy>& coordinates)
+{
+	int index = 0; // starting at point 0
+	int count = 0;
+	int nextIndex;
+	// creating a dynamic vector as for flagging used points
+	vector<bool> check;
+	for (int i = 0; i <= matrix.size(); i++)
+	{
+		check.push_back(false);
+	}
+	double distanceTravelled = 0;
+
+	cout << "Visited Nodes: ";
+	for (count; count < matrix.size() - 1; count++) // Last point => return to first point
+	{
+		double min = DBL_MAX;
+		int j; // iterator
+		for (j = 0; j < matrix[index].size(); j++)
+		{
+			if (check[j] != true && matrix[index][j] < min)
+			{
+				min = matrix[index][j];
+				nextIndex = j;
+			}
+
+		}
+		char printNodeName = 'A' + index;
+		cout << printNodeName;
+
+		distanceTravelled += min;
+
+		check[index] = true;
+
+		index = nextIndex;
+	}
+	char printNodeName = 'A' + nextIndex;
+	cout << printNodeName;
+	//Way back to 0
+	return distanceTravelled += matrix[index][0];
+}
+
 int main(int argc, char* argv[]) {
 	vector<vector<double>> matrix;
 	vector<xy> coordinates;
 	vector<int> best_combi;
-	clock_t c_start = std::clock();
 	char* option;
 	char* filename;
 	int nodeNum;
@@ -240,7 +281,9 @@ int main(int argc, char* argv[]) {
 		cout << endl;
 	}
 
-	if (strcmp(argv[1], "-e") == 0) {
+	clock_t c_start = std::clock();
+
+	if (strcmp(option, "-e") == 0) {
 		cout << endl << "Shortest route is: " << route_enumeration(matrix, coordinates, nodeNum, best_combi) << endl;
 		cout << "Visited Nodes: ";
 		for (int i = 0; i < nodeNum; i++) {
@@ -250,7 +293,8 @@ int main(int argc, char* argv[]) {
 		cout << endl;
 	}
 	else {
-		cout << "testing -n" << endl;
+		cout << endl;
+		cout << endl << "Shortest route is: " <<  nearestNeighbor(matrix, coordinates) << endl;
 	}
 
 	clock_t c_end = std::clock();
